@@ -1,5 +1,5 @@
 import streamlit as st
-from RAG_pipeline import create_rag_pipeline, ask_question
+from rag_pipeline import create_rag_pipeline, ask_question
 
 st.set_page_config(page_title="YouTube RAG Chatbot")
 
