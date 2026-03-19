@@ -1,0 +1,182 @@
+# 🎥 YouTube RAG Chatbot – Intelligent Video Q&A System
+
+## 🧠 Overview
+
+**YouTube RAG Chatbot** is an AI-powered application that enables users to interact with any YouTube video through natural language queries.
+
+Instead of manually watching long videos, users can simply paste a YouTube URL and ask questions. The system processes the video transcript, retrieves relevant context, and generates accurate, context-aware answers using a Retrieval-Augmented Generation (RAG) pipeline.
+
+This project demonstrates the practical implementation of modern AI concepts such as vector databases, semantic search, and large language models in a real-world use case.
+
+---
+
+## 🚀 Features
+
+* 🎥 **YouTube Video Understanding**
+  Extracts and processes transcripts directly from YouTube videos.
+
+* 🔍 **Semantic Search with Vector Embeddings**
+  Converts text into embeddings using HuggingFace models for intelligent retrieval.
+
+* 🧠 **Retrieval-Augmented Generation (RAG)**
+  Combines retrieval (FAISS) with LLM reasoning for accurate answers.
+
+* ⚡ **Fast and Efficient Querying**
+  Uses FAISS vector database for low-latency similarity search.
+
+* 💬 **Interactive Streamlit UI**
+  Simple and intuitive interface for user interaction.
+
+* 🛡️ **Hallucination Reduction**
+  Custom prompt ensures answers are strictly based on retrieved context.
+
+---
+
+## 🏗️ System Architecture
+
+```
+YouTube URL
+     ↓
+Transcript Extraction
+     ↓
+Text Chunking
+     ↓
+Embeddings (HuggingFace)
+     ↓
+FAISS Vector Database
+     ↓
+Retriever (Similarity Search)
+     ↓
+Prompt Engineering
+     ↓
+LLM (Groq - LLaMA 3)
+     ↓
+Final Answer
+```
+
+---
+
+## ⚙️ Tech Stack
+
+* **Frontend**: Streamlit
+* **Backend**: Python
+* **LLM**: Groq (LLaMA 3.1)
+* **Embeddings**: HuggingFace (`all-MiniLM-L6-v2`)
+* **Vector Database**: FAISS
+* **Framework**: LangChain
+* **Data Source**: YouTube Transcript API
+
+---
+
+## 🔍 How It Works
+
+### 1. Video Ingestion
+
+* User provides a YouTube URL
+* Transcript is extracted using `YoutubeLoader`
+
+### 2. Text Processing
+
+* Transcript is split into smaller chunks using `RecursiveCharacterTextSplitter`
+* Ensures compatibility with LLM context limits
+
+### 3. Embedding Generation
+
+* Each chunk is converted into vector embeddings
+* Enables semantic similarity search
+
+### 4. Vector Storage
+
+* Embeddings are stored in FAISS for efficient retrieval
+
+### 5. Retrieval
+
+* User query is matched against stored embeddings
+* Top relevant chunks are retrieved
+
+### 6. Response Generation
+
+* Retrieved context is injected into a custom prompt
+* LLM generates answer strictly based on context
+
+---
+
+## 🧪 Example Use Case
+
+**Input:**
+
+```
+YouTube URL:https://www.youtube.com/watch?v=OYvlznJ4IZQ&t=215s
+Question: From above video can you summarize for me what is self-supervised learning
+```
+
+**Output:**
+
+```
+Self-supervised learning is a method where the model creates multiple challenges for itself without human intervention....
+```
+
+---
+
+## 🛠️ Installation & Setup
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+cd YOUR_REPO
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Add API Key
+
+Create a `.env` file:
+
+```
+GROQ_API_KEY=your_api_key_here
+```
+
+### 4. Run Application
+
+```bash
+python -m streamlit run app.py
+```
+
+---
+
+## 📁 Project Structure
+
+```
+youtube-rag-chatbot/
+│
+├── app.py              # Streamlit UI
+├── RAG_pipeline.py     # Core RAG logic
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
+
+---
+
+## ⚠️ Important Notes
+
+* FAISS vector files are excluded from GitHub using `.gitignore`
+* Embeddings are generated dynamically at runtime
+* Some YouTube videos may not have transcripts available
+
+---
+
+## 💡 Key Learnings
+
+* Built an end-to-end RAG system from scratch
+* Understood the importance of retrieval quality in LLM systems
+* Implemented prompt engineering to reduce hallucinations
+* Optimized performance using caching in Streamlit
+
+---
+

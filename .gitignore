@@ -1,0 +1,17 @@
+# Vector DB (CRITICAL)
+*.faiss
+*.pkl
+vectorstore/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Streamlit cache
+.streamlit/
+
+# Jupyter
+.ipynb_checkpoints/
