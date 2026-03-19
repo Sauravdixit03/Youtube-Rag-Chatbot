@@ -4,12 +4,21 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
-
+import streamlit as st
 
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
+
+api_key = os.getenv("GROQ_API_KEY")
+
+if not api_key:
+    try:
+        api_key = st.secrets["GROQ_API_KEY"]
+    except Exception:
+        raise ValueError("GROQ_API_KEY not found in environment or Streamlit secrets")
+
 
 def create_rag_pipeline(youtube_url):
     loader=YoutubeLoader.from_youtube_url(youtube_url)
@@ -25,7 +34,7 @@ def create_rag_pipeline(youtube_url):
     vector_store = FAISS.from_documents(chunks,embedding)
 
     retriever=vector_store.as_retriever(search_type="similarity",search_kwargs={"k":4})
-    llm=ChatGroq(model="llama-3.1-8b-instant",temperature=0.2)
+    llm=ChatGroq(model="llama-3.1-8b-instant",temperature=0.2,api_key=api_key)
     prompt=PromptTemplate(
     template="""
 Answer the question ONLY using the provided context.
