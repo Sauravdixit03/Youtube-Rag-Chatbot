@@ -151,15 +151,48 @@ python -m streamlit run app.py
 
 ## 📁 Project Structure
 
-```
+```text
 youtube-rag-chatbot/
 │
-├── app.py              # Streamlit UI
-├── RAG_pipeline.py     # Core RAG logic
-├── requirements.txt
+├── app.py                 # Streamlit UI
+├── rag_pipeline.py        # Core RAG pipeline logic
+├── requirements.txt       # Project dependencies
+├── Dockerfile             # Docker configuration
+├── .dockerignore          # Ignore unnecessary Docker files
 ├── README.md
-└── .gitignore
+├── .gitignore
+├── rag.ipynb              # Initial experimentation in Jupyter Notebook
 ```
+
+## 🌐 Live Demo
+
+🔗 Streamlit App:  
+https://youtube-rag-chatbot-ahmu6addrsfm4uq3aj2mq5.streamlit.app/
+
+---
+
+## 🐳 Docker Support
+
+### Pull Docker Image
+
+```bash
+docker pull saurav030905/youtube-rag-chatbot
+```
+
+### Run Container
+
+```bash
+docker run --env-file .env -p 8501:8501 saurav030905/youtube-rag-chatbot
+```
+
+---
+
+## 📦 Docker Hub
+
+🔗 Docker Image:  
+https://hub.docker.com/r/saurav030905/youtube-rag-chatbot
+
+
 
 ---
 
