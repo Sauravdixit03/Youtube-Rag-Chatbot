@@ -23,7 +23,7 @@ if not api_key:
 
 
 def create_rag_pipeline(youtube_url):
-    loader=YoutubeLoader.from_youtube_url(youtube_url,language=['en','hi'])
+    loader=YoutubeLoader.from_youtube_url(youtube_url,add_video_info=False)
     docs=loader.load()
 
     split_text=RecursiveCharacterTextSplitter(
