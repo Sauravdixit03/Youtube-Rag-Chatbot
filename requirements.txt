@@ -7,3 +7,4 @@ sentence-transformers
 youtube-transcript-api
 langchain-groq
 python-dotenv
+indic-transliteration

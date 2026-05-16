@@ -5,6 +5,8 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 import streamlit as st
+from indic_transliteration import sanscript
+from indic_transliteration.sanscript import transliterate
 
 from dotenv import load_dotenv
 import os
@@ -21,7 +23,7 @@ if not api_key:
 
 
 def create_rag_pipeline(youtube_url):
-    loader=YoutubeLoader.from_youtube_url(youtube_url)
+    loader=YoutubeLoader.from_youtube_url(youtube_url,language=['en','hi'])
     docs=loader.load()
 
     split_text=RecursiveCharacterTextSplitter(
@@ -30,7 +32,7 @@ def create_rag_pipeline(youtube_url):
     )
     chunks=split_text.split_documents(docs)
 
-    embedding=HuggingFaceEmbeddings()
+    embedding=HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
     vector_store = FAISS.from_documents(chunks,embedding)
 
     retriever=vector_store.as_retriever(search_type="similarity",search_kwargs={"k":4})
@@ -38,21 +40,56 @@ def create_rag_pipeline(youtube_url):
     prompt=PromptTemplate(
     template="""
 Answer the question ONLY using the provided context.
+
 If the answer is not in the context, say "I don't know".
 
-{context}
+IMPORTANT RULES:
+- Always answer in the SAME language as the user's question.
+- Ignore the language of the retrieved context while generating the response.
+- If the question is in English, answer ONLY in English.
+- If the question is in Hinglish, answer in Hinglish.
+- If the question is in Hindi, answer ONLY in Hindi.
 
+Context:
+{context}
 
 Question:
 {question}
 """,
-input_variables=["context","question"]
+    input_variables=["context", "question"]
 )
     return retriever,llm,prompt
 
+
+def preprocess_query(query):
+
+    hindi_words = ['kya', 'kaise', 'kyu', 'hai', 'ka', 'hota']
+
+    if any(word in query.lower() for word in hindi_words):
+
+        try:
+
+            hindi_query = transliterate(
+                query,
+                sanscript.ITRANS,
+                sanscript.DEVANAGARI
+            )
+
+            return hindi_query
+
+        except:
+
+            return query
+
+    return query
+
+
+    
+
 def ask_question(query, retriever, llm, prompt):
     
-    docs = retriever.invoke(query)
+    processed_query=preprocess_query(query)
+    docs = retriever.invoke(processed_query)
 
     context = "\n\n".join(doc.page_content for doc in docs)
 

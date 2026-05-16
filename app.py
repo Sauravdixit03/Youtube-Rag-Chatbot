@@ -20,16 +20,27 @@ def load_pipeline(url):
 
 # Process button
 if st.button("Process Video"):
-    if youtube_url:
-        with st.spinner("Processing video..."):
-            retriever, llm, prompt = load_pipeline(youtube_url)
-            
-            st.session_state.retriever = retriever
-            st.session_state.llm = llm
-            st.session_state.prompt = prompt
 
-        st.success("✅ Video processed! You can now ask questions.")
+    if youtube_url:
+
+        with st.spinner("Extracting transcript and creating embeddings..."):
+
+            try:
+
+                retriever, llm, prompt = load_pipeline(youtube_url)
+
+                st.session_state.retriever = retriever
+                st.session_state.llm = llm
+                st.session_state.prompt = prompt
+
+                st.success("✅ Video processed! You can now ask questions.")
+
+            except Exception as e:
+
+                st.error(f"❌ {str(e)}")
+
     else:
+
         st.warning("⚠️ Please enter a YouTube URL")
 
 # Question input
